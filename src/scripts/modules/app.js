@@ -14,13 +14,13 @@ class Slider {
         this.$slides = $el.querySelectorAll('.slider-item');
         this.$text = $el.querySelectorAll('.slider-item-text > span');
         this.$arrayParams = [];
-        // this.$time = (this.$element.dataset.time && this.$element.dataset.time != '') ? this.$element.dataset.time : 2000;
+        this.$time = (this.$element.dataset.time && this.$element.dataset.time != '') ? this.$element.dataset.time : 500; // задержка перед переадресацией
         this.$link = (this.$element.dataset.link && this.$element.dataset.link != '') ? this.$element.dataset.link : ''; //ссылка для перехода на др. страницу
         // this.$transform = (this.$element.dataset.transform && this.$element.dataset.transform != '') ? this.$element.dataset.transform : 20; //ссылка для перехода на др. страницу
         
         
         this.setSliderParam();
-        // this.startAnimation();
+        this.startAnimation2();
     }
 
     setSliderParam() {
@@ -28,7 +28,8 @@ class Slider {
             let parent = this.$text[i].parentNode;
             this.$arrayParams[i] = {
                 text: this.$text[i].innerText,
-                time: parseInt((parent.dataset.time && parent.dataset.time != '') ? parent.dataset.time : 2000),
+                textTime: parseInt((parent.dataset.time && parent.dataset.time != '') ? parent.dataset.time : 2000),
+                slideTime: parseInt((parent.dataset.time && parent.dataset.time != '') ? parent.dataset.time : 2000),
                 animation: (parent.dataset.animation && parent.dataset.animation != '') ? parent.dataset.animation : 'smoothly',
                 delay: parseInt((parent.dataset.delay && parent.dataset.delay != '') ? parent.dataset.delay : 0), //задержка перед анимированием текста
                 transform: parseInt((parent.dataset.transform && parent.dataset.transform != '') ? parent.dataset.transform : 20)
@@ -36,6 +37,17 @@ class Slider {
         }
         console.log(this.$arrayParams);
         
+    }
+
+    startAnimation2() {
+        for (let i = 0; i < this.$slides.length; i++) {
+            setTimeout(() => {
+                this.changeImages(i);
+                setTimeout(() => {
+                    this.changeTextWidth(i);
+                }, this.$delay);
+            }, i * this.$time);
+        }
     }
 
     startAnimation() {
