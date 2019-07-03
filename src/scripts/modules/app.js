@@ -12,7 +12,8 @@ class Slider {
     constructor($el) {
         this.$element = $el;
         this.$slides = $el.querySelectorAll('.slider-item');
-        this.$text = $el.querySelectorAll('.slider-item-text > span');
+        this.$textItems = $el.querySelectorAll('.slider-item-text');
+        this.$text = [];
         this.$arrayParams = [];
         this.$time = (this.$element.dataset.time && this.$element.dataset.time != '') ? parseInt(this.$element.dataset.time) : 500; // задержка перед переадресацией
         this.$link = (this.$element.dataset.link && this.$element.dataset.link != '') ? this.$element.dataset.link : ''; //ссылка для перехода на др. страницу
@@ -22,21 +23,28 @@ class Slider {
     }
 
     setSliderParam() {
-        for (let i = 0; i < this.$text.length; i++) {
-            let parent = this.$text[i].parentNode;
-            // let textTime = parseInt((parent.dataset.textTime && parent.dataset.textTime != '') ? parent.dataset.textTime : 1500);
-            // let slideTime = parseInt((parent.dataset.slideTime && parent.dataset.slideTime != '') ? parent.dataset.slideTime : 3000);
-            // let delay = parseInt((parent.dataset.delay && parent.dataset.delay != '') ? parent.dataset.delay : 500);
+        
+        for (let i = 0; i < this.$textItems.length; i++) {
+            if (this.$textItems[i].getElementsByTagName('span')[0]) {
+                this.$text[i] = this.$textItems[i].getElementsByTagName('span')[0];
+                 
+            } else {
+                this.$text[i] = null;
+                this.$textItems[i].classList.add('is-opacity');
+            }
+
+            let parent = this.$textItems[i];
             this.$arrayParams[i] = {
-                text: this.$text[i].innerText,
+                text: this.$text[i] != null ? this.$text[i].innerText : '',
                 textTime: parseInt((parent.dataset.textTime && parent.dataset.textTime != '') ? parent.dataset.textTime : 1500), // время анимирования текста (уже с задержкой)
                 slideTime: parseInt((parent.dataset.slideTime && parent.dataset.slideTime != '') ? parent.dataset.slideTime : 3000), // время слайда
                 animation: (parent.dataset.animation && parent.dataset.animation != '') ? parent.dataset.animation : 'smoothly',
                 delay: parseInt((parent.dataset.delay && parent.dataset.delay != '') ? parent.dataset.delay : 500), //задержка перед анимированием текста
                 transform: parseInt((parent.dataset.transform && parent.dataset.transform != '') ? parent.dataset.transform : 20)
-            } 
+            }
         }
-        // console.log(this.$arrayParams);
+        console.log(this.$arrayParams);
+        
     }
 
     startAnimation2() {
@@ -59,20 +67,27 @@ class Slider {
                         this.cloneText(i);
                         this.changeTextWidth(i);
 
+                    } else if (this.$arrayParams[i].animation == 'opacity') {
+                        this.deleteOldClasses(i);
+                        this.$textItems[i].classList.remove('is-opacity');
                     }
                 }, this.$arrayParams[i].delay);
 
             }, time);
         }
+        time += this.$arrayParams[this.$slides.length - 1].slideTime + this.$time;
 
         if (this.$link != '') {
-            time += this.$time + 500;
-            console.log(time);
-            debugger;
             setTimeout(() => {
                 window.location.href = this.$link;
             }, time);
         }
+        // else {
+        //     console.log(time);
+        //     setTimeout(() => {
+        //         alert('stop');
+        //     }, time);
+        // }
     }
 
     setText(i) {
@@ -126,69 +141,15 @@ class Slider {
 
     deleteOldClasses(i) {
         if (i > 0) {
-            this.$text[i - 1].style.display = 'none';
-            this.$text[i - 1].classList.contains('for-smoothly') ? this.$text[i - 1].classList.remove('for-smoothly') : null;
-            this.$text[i - 1].classList.contains('for-spell') ? this.$text[i - 1].classList.remove('for-spell') : null;
-            this.$text[i - 1].classList.contains('for-transform') ? this.$text[i - 1].classList.remove('for-transform') : null;
-        }
-    }
-
-    startAnimation() {
-        if (this.$animation == 'smoothly') {
-            this.cloneTextSpan();
-            for (let i = 0; i < this.$slides.length; i++) {
-                setTimeout(() => {
-                    this.changeImages(i);
-                    setTimeout(() => {
-                        this.changeTextWidth(i);
-                    }, this.$delay);
-                }, i * this.$time);
+            if (this.$text[i - 1] != null) {
+                this.$text[i - 1].style.display = 'none';
+                this.$text[i - 1].classList.contains('for-smoothly') ? this.$text[i - 1].classList.remove('for-smoothly') : null;
+                this.$text[i - 1].classList.contains('for-spell') ? this.$text[i - 1].classList.remove('for-spell') : null;
+                this.$text[i - 1].classList.contains('for-transform') ? this.$text[i - 1].classList.remove('for-transform') : null;
+            } else {
+                this.$textItems[i-1].classList.add('is-opacity');
+                this.deleteOldClasses(i-1);
             }
-        } else if (this.$animation == 'spell') {
-            this.setTextArray();
-            for (let i = 0; i < this.$slides.length; i++) {
-                setTimeout(() => {
-                    this.changeImages(i);
-                    setTimeout(() => {
-                        this.changeTextSpell(i);
-                    }, this.$delay);
-                }, i * this.$time);
-            }
-        }
-        else if (this.$animation == 'transform') {           
-            for (let i = 0; i < this.$text.length; i++) {
-                this.$text[i].classList.add('transform-start');
-            }
-            for (let i = 0; i < this.$slides.length; i++) {
-                setTimeout(() => {
-                    this.changeImages(i);
-                    setTimeout(() => {
-                        this.changeTextTransform(i);
-                    }, this.$delay);
-                }, i * this.$time);
-            }
-        }
-        if (this.$link != '') {
-            setTimeout(() => {
-                window.location.href = this.$link;
-            }, this.$slides.length * this.$time + 500);
-        }
-    }
-
-    setTextArray() {
-        for (let i = 0; i < this.$text.length; i++) {
-            this.$textArray[i] = this.$text[i].innerText;
-            this.$text[i].innerText = '';
-            this.$text[i].classList.add('for-spell');
-        }
-    }
-
-    cloneTextSpan() {
-        for (let i = 0; i < this.$text.length; i++) {
-            let cloneSpan = document.createElement('span');
-            cloneSpan.classList.add('clone-text');
-            cloneSpan.innerHTML = this.$text[i].innerText.split(' ').join('&nbsp;');
-            this.$text[i].appendChild(cloneSpan);
         }
     }
 }
