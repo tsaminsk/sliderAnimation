@@ -1,0 +1,17 @@
+block variables
+
+doctype html
+html(lang="ru")
+    head
+        meta(charset="utf-8")
+        title #{title}
+        meta(content="Talai Searhei" name="author")
+        meta(content="" name="description")
+        meta(content="width=device-width, initial-scale=1" name="viewport")
+        meta(content="ie=edge" http-equiv="x-ua-compatible")
+        link(rel='stylesheet' href='./assets/styles/main.min.css')
+
+    body
+        block content
+        //- script(src="./assets/scripts/libs.min.js")
+        script(src="./assets/scripts/script.min.js")

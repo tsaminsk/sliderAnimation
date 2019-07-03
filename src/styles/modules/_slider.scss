@@ -1,0 +1,114 @@
+.slider {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+
+    &-images {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        counter-reset: items;
+    }
+
+    &-item {
+        position: absolute;
+        counter-increment: items;
+        z-index: calc(2 + counter(items));
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        background: center center no-repeat;
+        background-size: cover;
+        transition-property: transform, opacity;
+        // transition-duration: 1s;
+
+
+        &:first-child {
+            opacity: 0.9;
+        }
+
+        &.active {
+            transform: scale(1.1, 1.1);
+            transform-origin: 50% 50%;
+            opacity: 1;
+        }
+    }
+
+    &-description,
+    &-item-text {
+        position: absolute;
+        z-index: 50;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    &-description {
+        // padding: 20vh 0 0;
+    }
+
+    &-item-text {
+        height: auto;
+        font-size: 3rem;
+        line-height: 68px;
+        text-align: center;
+        margin: 30vh 0 0;
+        
+        > span {
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            color: rgba(255, 255, 255, 0);
+
+            &.transform-start {
+                opacity: 0;
+                text-shadow: rgb(0, 0, 0) 2px 3px 6px,
+                rgb(0, 0, 0) -1px -1px 1px;
+                color: #fff;
+            }
+
+            &.for-transform {
+               transform: scale(1.2, 1.2);
+               transform-origin: 50% 50%;
+               opacity: 1;
+            }
+
+            &.for-smoothly span.clone-text {
+                min-width: 100%;
+            }
+
+            &.for-spell {
+                text-shadow: rgb(0, 0, 0) 2px 3px 6px, rgb(0, 0, 0) -1px -1px 1px;
+                color: #fff;
+            }
+        }
+
+        span.clone-text {
+            position: absolute;
+            z-index: 200;
+            top: 0;
+            left: 0;
+            width: 0;
+            min-width: 0;
+            height: 100%;
+            overflow: hidden;
+            word-wrap: normal;
+            text-shadow: rgb(0, 0, 0) 2px 3px 6px,
+            rgb(0, 0, 0) -1px -1px 1px;
+            color: #fff;
+            transition-property: min-width;
+            transition-duration: 1s;
+        }
+    }
+
+    &-item-last {
+
+    }
+
+    
+}

@@ -1,0 +1,86 @@
+mixin headerBlock(nav, current, headerClass)
+    .mob-menu.js-mob-menu
+        .mob-menu__close
+            a(href="javascript:void(0)").js-mob-menu-close
+                .icon.icon-close
+        ul.mob-menu__lists
+            each item in nav
+                if item.url === current
+                    li.active
+                        a(href=item.url)= item.name
+                else
+                    li
+                        a(href=item.url)= item.name
+    header.header(class=headerClass)
+        .header__inner
+            .header__mobile
+                a(href="javascript:void(0)").js-mob-menu-open
+                    .icon.icon-menu
+            .header__logo
+                a(href="/")
+                    img(src="assets/images/logo.png" alt="")
+            ul.header__nuv
+                each item in nav
+                    if item.url === current
+                        li.active
+                            a(href=item.url)= item.name
+                    else
+                        li
+                            a(href=item.url)= item.name
+            .header__phone
+                a.phone(href="javascript:void(0)").js-popup-open
+                    .icon.icon-phone-icon(title="Заказать звонок" )
+                a(href="tel:+74992882735")
+                    | 8 499 288 27 35
+        .header__decor
+
+
+mixin breadCrumbs(navs, className)
+    ul.bread-crumbs(class=className)
+        each item in navs
+            li.bread-crumbs__item
+                a(href=item.link)= item.name
+
+mixin slider(image, type, className)
+    .slider.js-slider(class=className)
+        .slider__img
+            each i in [0,1,2,3]
+                .slider__item(style="background-image: url(" + image + ")")
+                    if (type == "club")
+                        .slider__item-title
+                            | <strong>кибер клуб</strong> CyberX #{i + 1}<br>
+                            | «gaming club» <br>
+                            span в&nbsp;иркутске
+                    if (type == "index")
+                        .slider__item-title
+                            | сеть кибер клубов #{i + 1}<br>
+                            | CyberX - <span>пример <br>
+                            | заголовка на&nbsp;баннере</span>
+        .slider__pagination
+            .pagination.js-slider-pagination
+                .pagination-item.is-active
+                .pagination-item
+                .pagination-item
+                .pagination-item
+        .slider__arrow-left.js-slider-left
+            a(href="javascript:void(0)")
+                .icon.icon-slider-arrow
+        .slider__arrow-right.js-slider-right
+            a(href="javascript:void(0)")
+                .icon.icon-slider-arrow.rotate180
+
+mixin ciberCommunity(text, text2, text3)
+    .about__logo
+        img(src="assets/images/about-logo.png" alt="")
+    .about__title
+        if (text2)
+            h2 #{text}<br>#{text2}
+        else
+            h2 #{text}
+        if (text3)
+            p #{text3}
+
+mixin socItem(name)
+    a(href="#").club__soc-item
+        .icon(class=`icon-soc-${name}`)
+        
