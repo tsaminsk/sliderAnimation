@@ -6,37 +6,14 @@ html {
 
 body {
     position: relative;
-    // min-height: 100vh;
-    // animation: show 0.25s linear;
-    // box-sizing: border-box;
-    // background-color: #fafafa;
 }
 
 div {
     box-sizing: border-box;
 }
 
-// h1, h2 {
-//     font-size: 48px;
-//     font-weight: 800;
-//     color: #000;
-//     text-align: center;
-// }
-
-// p {
-//     padding: 0 0 60px;
-//     font-size: 22px;
-//     line-height: 30px;
-//     font-weight: 300;
-//     margin: 0;
-// }
-
 .clearfix::after {
     content: "";
     display: table;
     clear: both;
-}
-
-.container {
-
 }

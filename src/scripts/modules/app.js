@@ -40,7 +40,8 @@ class Slider {
                 slideTime: parseInt((parent.dataset.slideTime && parent.dataset.slideTime != '') ? parent.dataset.slideTime : 3000), // время слайда
                 animation: (parent.dataset.animation && parent.dataset.animation != '') ? parent.dataset.animation : 'smoothly',
                 delay: parseInt((parent.dataset.delay && parent.dataset.delay != '') ? parent.dataset.delay : 500), //задержка перед анимированием текста
-                transform: parseInt((parent.dataset.transform && parent.dataset.transform != '') ? parent.dataset.transform : 20)
+                transform: parseInt((parent.dataset.transform && parent.dataset.transform != '') ? parent.dataset.transform : 20),
+                transformImg: parseInt((this.$slides[i].dataset.transform && this.$slides[i].dataset.transform != '') ? this.$slides[i].dataset.transform : 10)
             }
         }
         console.log(this.$arrayParams);
@@ -108,16 +109,16 @@ class Slider {
     }
 
     changeImages(i) {
-        this.$slides[i].classList.add('active');
+        let k = (this.$arrayParams[i].transformImg + 100) / 100;
+        this.$slides[i].style.transform = "scale(" + k + "," + k + ")";
         this.$slides[i].style.transitionDuration = this.$arrayParams[i].slideTime / 1000 + 's';
+        this.$slides[i].classList.add('active');
     }
 
     changeTextTransform(i) {
         this.deleteOldClasses(i);
         let k = (this.$arrayParams[i].transform + 100) / 100;
-        if (this.$transform != 20) {
-            this.$text[i].style.transform = "scale(" + k + "," + k + ")";
-        }
+        this.$text[i].style.transform = "scale(" + k + "," + k + ")";
         this.$text[i].classList.add('for-transform');
         this.$text[i].style.transitionDuration = (this.$arrayParams[i].textTime) / 1000 + 's';
     }

@@ -20,7 +20,6 @@
         background: center center no-repeat;
         background-size: cover;
         transition-property: transform, opacity;
-        // transition-duration: 1s;
 
         @for $i from 1 through 20 {
             &:nth-child(#{$i}) {
@@ -100,8 +99,7 @@
             display:block;
             overflow: hidden;
             word-wrap: normal;
-            text-shadow: rgb(0, 0, 0) 2px 3px 6px,
-            rgb(0, 0, 0) -1px -1px 1px;
+            text-shadow: rgb(0, 0, 0) 2px 3px 6px,rgb(0, 0, 0) -1px -1px 1px;
             color: #fff;
         }
 
