@@ -39,6 +39,10 @@
                 transform-origin: 50% 50%;
             }
         }
+
+        &.no-transform {
+            transform: scale(1, 1) !important;
+        }
     }
 
     &-description,

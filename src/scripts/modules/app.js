@@ -12,18 +12,28 @@ class Slider {
     constructor($el) {
         this.$element = $el;
         this.$slides = $el.querySelectorAll('.slider-item');
-        this.$textItems = $el.querySelectorAll('.slider-item-text');
+        this.$textItems = [];
         this.$text = [];
         this.$arrayParams = [];
         this.$time = (this.$element.dataset.time && this.$element.dataset.time != '') ? parseInt(this.$element.dataset.time) : 500; // задержка перед переадресацией
         this.$link = (this.$element.dataset.link && this.$element.dataset.link != '') ? this.$element.dataset.link : ''; //ссылка для перехода на др. страницу
         
+        this.setSliderDOM();
         this.setSliderParam();
-        this.startAnimation2();
+        this.startAnimation();
+    }
+
+    setSliderDOM() {
+        let sliderDescription = document.createElement('div');
+        sliderDescription.classList.add('slider-description');
+        this.$element.appendChild(sliderDescription);
+        for (let i = 0; i < this.$slides.length; i++) {            
+            sliderDescription.appendChild(this.$slides[i].getElementsByClassName('slider-item-text')[0]);
+        }
+        this.$textItems = this.$element.querySelectorAll('.slider-item-text');
     }
 
     setSliderParam() {
-        
         for (let i = 0; i < this.$textItems.length; i++) {
             if (this.$textItems[i].getElementsByTagName('span')[0]) {
                 this.$text[i] = this.$textItems[i].getElementsByTagName('span')[0];
@@ -32,27 +42,26 @@ class Slider {
                 this.$text[i] = null;
                 this.$textItems[i].classList.add('is-opacity');
             }
-
             let parent = this.$textItems[i];
             this.$arrayParams[i] = {
                 text: this.$text[i] != null ? this.$text[i].innerText : '',
-                textTime: parseInt((parent.dataset.textTime && parent.dataset.textTime != '') ? parent.dataset.textTime : 1500), // время анимирования текста (уже с задержкой)
-                slideTime: parseInt((parent.dataset.slideTime && parent.dataset.slideTime != '') ? parent.dataset.slideTime : 3000), // время слайда
+                textTime: parseInt((parent.dataset.textTime && parent.dataset.textTime != '') ? parent.dataset.textTime : 1500), // время анимирования текста
+                slideDelay: parseInt((this.$slides[i].dataset.zoomDelay && this.$slides[i].dataset.zoomDelay != '') ? this.$slides[i].dataset.zoomDelay : 0), // задержка перед трансформацией картинки
+                opacytiTime: parseInt((this.$slides[i].dataset.opacytiTime && this.$slides[i].dataset.opacytiTime != '') ? this.$slides[i].dataset.opacytiTime : 2000), // время проявления картинки слайда
+                slideTime: parseInt((this.$slides[i].dataset.slideTime && this.$slides[i].dataset.slideTime != '') ? this.$slides[i].dataset.slideTime : 3000), // время слайда
                 animation: (parent.dataset.animation && parent.dataset.animation != '') ? parent.dataset.animation : 'smoothly',
-                delay: parseInt((parent.dataset.delay && parent.dataset.delay != '') ? parent.dataset.delay : 500), //задержка перед анимированием текста
-                transform: parseInt((parent.dataset.transform && parent.dataset.transform != '') ? parent.dataset.transform : 20),
-                transformImg: parseInt((this.$slides[i].dataset.transform && this.$slides[i].dataset.transform != '') ? this.$slides[i].dataset.transform : 10)
+                delay: parseInt((parent.dataset.textDelay && parent.dataset.textDelay != '') ? parent.dataset.textDelay : 500), //задержка перед анимированием текста
+                transform: parseInt((parent.dataset.zoom && parent.dataset.zoom != '') ? parent.dataset.zoom : 20),
+                transformImg: parseInt((this.$slides[i].dataset.zoom && this.$slides[i].dataset.zoom != '') ? this.$slides[i].dataset.zoom : 10)
             }
         }
-        console.log(this.$arrayParams);
-        
+        // console.log(this.$arrayParams);
     }
 
-    startAnimation2() {
+    startAnimation() {
         let time = 0;
         for (let i = 0; i < this.$slides.length; i++) {
             i > 0 ? time += this.$arrayParams[i-1].slideTime : 0;
-
             setTimeout(() => {
                 this.changeImages(i);
                 if (this.$arrayParams[i].animation == 'transform') {
@@ -103,16 +112,16 @@ class Slider {
         for (let j = 0; j < wdth; j++) {
             setTimeout(() => {
                 this.$text[i].innerText = this.$arrayParams[i].text.substring(0, j + 1);
-
             }, j * time / wdth);
         }
     }
 
     changeImages(i) {
+        this.$slides[i].classList.add('active');
         let k = (this.$arrayParams[i].transformImg + 100) / 100;
         this.$slides[i].style.transform = "scale(" + k + "," + k + ")";
-        this.$slides[i].style.transitionDuration = this.$arrayParams[i].slideTime / 1000 + 's';
-        this.$slides[i].classList.add('active');
+        this.$slides[i].style.transitionDelay = this.$arrayParams[i].slideDelay / 1000 + 's, 0s';
+        this.$slides[i].style.transitionDuration = (this.$arrayParams[i].slideTime - this.$arrayParams[i].slideDelay) / 1000 + 's, ' + this.$arrayParams[i].opacytiTime / 1000 + 's';
     }
 
     changeTextTransform(i) {
