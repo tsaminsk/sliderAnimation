@@ -3,6 +3,8 @@
     height: 100vh;
     overflow: hidden;
     position: relative;
+    transition: opacity 0.5s;
+    opacity: 0;
 
     &-images {
         position: relative;
@@ -108,7 +110,12 @@
         }
 
         &.is-opacity {
-            opacity: 0;
+            display: none;
+            opacity: 0 !important;
+
+            a {
+                color: rgba(0,0,0,0);
+            }
         }
     }  
 }

@@ -31,6 +31,10 @@ class Slider {
             sliderDescription.appendChild(this.$slides[i].getElementsByClassName('slider-item-text')[0]);
         }
         this.$textItems = this.$element.querySelectorAll('.slider-item-text');
+        
+        setTimeout( () => {
+            this.$element.style.opacity = '1';
+        }, 500);
     }
 
     setSliderParam() {
