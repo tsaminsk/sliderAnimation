@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", ready);
 
 function ready() {
     var slider = document.querySelector('.js-slider');
-
     if (slider) {
         new Slider(slider);
     }
@@ -31,17 +30,12 @@ class Slider {
             sliderDescription.appendChild(this.$slides[i].getElementsByClassName('slider-item-text')[0]);
         }
         this.$textItems = this.$element.querySelectorAll('.slider-item-text');
-        
-        setTimeout( () => {
-            this.$element.style.opacity = '1';
-        }, 500);
     }
 
     setSliderParam() {
         for (let i = 0; i < this.$textItems.length; i++) {
             if (this.$textItems[i].getElementsByTagName('span')[0]) {
                 this.$text[i] = this.$textItems[i].getElementsByTagName('span')[0];
-                 
             } else {
                 this.$text[i] = null;
                 this.$textItems[i].classList.add('is-opacity');
@@ -68,6 +62,8 @@ class Slider {
             i > 0 ? time += this.$arrayParams[i-1].slideTime : 0;
             setTimeout(() => {
                 this.changeImages(i);
+                this.$textItems[i].style.opacity = '1';
+                i > 0 ? this.$textItems[i - 1].style.display = 'none' : null;
                 if (this.$arrayParams[i].animation == 'transform') {
                     this.$text[i].classList.add('transform-start');
                 }
@@ -80,28 +76,19 @@ class Slider {
                     } else if (this.$arrayParams[i].animation == 'smoothly') {
                         this.cloneText(i);
                         this.changeTextWidth(i);
-
                     } else if (this.$arrayParams[i].animation == 'opacity') {
                         this.deleteOldClasses(i);
                         this.$textItems[i].classList.remove('is-opacity');
                     }
                 }, this.$arrayParams[i].delay);
-
             }, time);
         }
         time += this.$arrayParams[this.$slides.length - 1].slideTime + this.$time;
-
         if (this.$link != '') {
             setTimeout(() => {
                 window.location.href = this.$link;
             }, time);
         }
-        // else {
-        //     console.log(time);
-        //     setTimeout(() => {
-        //         alert('stop');
-        //     }, time);
-        // }
     }
 
     setText(i) {
