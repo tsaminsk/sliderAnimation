@@ -35,7 +35,7 @@
     "imagemin-pngquant": "^6.0.0",
     "jshint": "^2.9.7",
     "jshint-stylish": "^2.2.1",
-    "stylelint": "^9.6.0",
+    "stylelint": "^15.10.1",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-order": "^1.0.0",
     "stylelint-scss": "^3.3.1"
